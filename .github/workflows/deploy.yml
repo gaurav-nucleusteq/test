@@ -1,0 +1,24 @@
+name: Deploy Model
+
+on:
+  workflow_dispatch:
+    inputs:
+      experiment_id:
+        description: "Experiment ID"
+        required: true
+      run_id:
+        description: "Run ID"
+        required: true
+      compute_type:
+        description: "Compute size (small, medium, large)"
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Inputs
+        run: |
+          echo "Experiment ID: ${{ github.event.inputs.experiment_id }}"
+          echo "Run ID: ${{ github.event.inputs.run_id }}"
+          echo "Compute Type: ${{ github.event.inputs.compute_type }}"
