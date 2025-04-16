@@ -3,12 +3,6 @@ name: Deploy Model
 on:
   workflow_dispatch:
     inputs:
-      model_name:
-        description: "Model Name"
-        required: true
-      model_version:
-        description: "Model Version"
-        required: true
       experiment_id:
         description: "Experiment ID"
         required: true
@@ -25,8 +19,6 @@ jobs:
     steps:
       - name: Print Inputs
         run: |
-          echo "Model Name: ${{ github.event.inputs.model_name }}"
-          echo "Model Version: ${{ github.event.inputs.model_version }}"
           echo "Experiment ID: ${{ github.event.inputs.experiment_id }}"
           echo "Run ID: ${{ github.event.inputs.run_id }}"
           echo "Compute Type: ${{ github.event.inputs.compute_type }}"
