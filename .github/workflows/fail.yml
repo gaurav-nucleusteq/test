@@ -14,11 +14,14 @@ on:
         required: true
 
 jobs:
-  fail-job:
+  wait-and-fail:
     runs-on: ubuntu-latest
     steps:
-      - name: Print message
-        run: echo "This workflow will now fail intentionally."
-      
-      - name: Fail step
-        run: exit 1
+      - name: Start timer
+        run: echo "Waiting for 5 minutes before failing..."
+      - name: Sleep for 5 minutes
+        run: sleep 300  # 300 seconds = 5 minutes
+      - name: Fail intentionally
+        run: |
+          echo "Now failing the workflow after waiting."
+          exit 1
