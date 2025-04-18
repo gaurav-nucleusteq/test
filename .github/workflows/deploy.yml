@@ -12,6 +12,9 @@ on:
       compute_type:
         description: "Compute size (small, medium, large)"
         required: true
+      triggerid:
+        description: "Trigger ID"
+        required: true
 
 jobs:
   deploy:
