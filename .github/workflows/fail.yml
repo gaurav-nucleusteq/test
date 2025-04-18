@@ -15,7 +15,9 @@ on:
       triggerid:
         description: "Trigger ID"
         required: true
-      
+
+# 👇 This sets the run name dynamically
+run-name: Deploy-${{ inputs.experiment_id }}-${{ inputs.triggerid }}
 
 jobs:
   wait-and-fail:
@@ -23,8 +25,10 @@ jobs:
     steps:
       - name: Start timer
         run: echo "Waiting for 5 minutes before failing..."
+
       # - name: Sleep for 5 minutes
-      #   run: sleep 300  # 300 seconds = 5 minutes
+      #   run: sleep 300
+
       - name: Fail intentionally
         run: |
           echo "Now failing the workflow after waiting."
