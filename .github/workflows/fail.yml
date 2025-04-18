@@ -20,8 +20,8 @@ jobs:
       - name: Start timer
         run: echo "Waiting for 5 minutes before failing..."
       # - name: Sleep for 5 minutes
-        # run: sleep 300  # 300 seconds = 5 minutes
-      # - name: Fail intentionally
-      #   run: |
-      #     echo "Now failing the workflow after waiting."
-      #     exit 1
+      #   run: sleep 300  # 300 seconds = 5 minutes
+      - name: Fail intentionally
+        run: |
+          echo "Now failing the workflow after waiting."
+          exit 1
