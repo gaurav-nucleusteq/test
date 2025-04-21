@@ -29,5 +29,5 @@ jobs:
           echo "Experiment ID: ${{ github.event.inputs.experiment_id }}"
           echo "Run ID: ${{ github.event.inputs.run_id }}"
           echo "Compute Type: ${{ github.event.inputs.compute_type }}"
-          echo "Compute Type: ${{ github.event.inputs.model_name }}"
-          echo "Compute Type: ${{ github.event.inputs.model_version }}"
+          echo "Model Name: ${{ github.event.inputs.model_name }}"
+          echo "Model Version: ${{ github.event.inputs.model_version }}"
