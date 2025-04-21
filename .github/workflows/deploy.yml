@@ -12,9 +12,13 @@ on:
       compute_type:
         description: "Compute size (small, medium, large)"
         required: true
-      triggerid:
-        description: "Trigger ID"
+      model_name:
+        description: "model name"
         required: true
+      model_versison:
+        description: "model version"
+        required: true
+run-name: Deploy-${{ inputs.model_name }}-${{ inputs.model_version }}
 
 jobs:
   deploy:
@@ -25,3 +29,5 @@ jobs:
           echo "Experiment ID: ${{ github.event.inputs.experiment_id }}"
           echo "Run ID: ${{ github.event.inputs.run_id }}"
           echo "Compute Type: ${{ github.event.inputs.compute_type }}"
+          echo "Compute Type: ${{ github.event.inputs.model_name }}"
+          echo "Compute Type: ${{ github.event.inputs.model_version }}"
