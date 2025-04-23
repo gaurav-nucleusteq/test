@@ -3,31 +3,28 @@ name: Deploy Model
 on:
   workflow_dispatch:
     inputs:
-      experiment_id:
-        description: "Experiment ID"
+      callback_url:
         required: true
-      run_id:
-        description: "Run ID"
+        type: string
+      token:
         required: true
-      compute_type:
-        description: "Compute size (small, medium, large)"
-        required: true
-      model_name:
-        description: "model name"
-        required: true
-      model_version:
-        description: "model version"
-        required: true
-run-name: Deploy-${{ inputs.model_name }}-${{ inputs.model_version }}
+        type: string
 
 jobs:
-  deploy:
+  call-api:
     runs-on: ubuntu-latest
     steps:
-      - name: Print Inputs
+      - name: Call Public API with Bearer Token and Fixed Body
         run: |
-          echo "Experiment ID: ${{ github.event.inputs.experiment_id }}"
-          echo "Run ID: ${{ github.event.inputs.run_id }}"
-          echo "Compute Type: ${{ github.event.inputs.compute_type }}"
-          echo "Model Name: ${{ github.event.inputs.model_name }}"
-          echo "Model Version: ${{ github.event.inputs.model_version }}"
+          echo "Calling public API..."
+
+          RESPONSE=$(curl -s -X POST https://api.dev.nuodata.io/nova-ai/v1/asset/list \
+            -H "Authorization: Bearer ${{ github.event.inputs.token }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "visibility_scope": ["workspace"],
+              "scope_element_ids": ["66fb931d35dedf279acffd75"]
+            }')
+
+          echo "API response:"
+          echo "$RESPONSE"
