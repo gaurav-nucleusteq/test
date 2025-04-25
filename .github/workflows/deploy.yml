@@ -31,7 +31,7 @@ jobs:
 
       - name: Print input values
         run: |
-          echo "🔧 INPUT VALUES:"
+          echo "INPUT VALUES:"
           echo "S3_BUCKET_NAME = ${{ inputs.S3_BUCKET_NAME }}"
           echo "EXPERIMENT_ID  = ${{ inputs.EXPERIMENT_ID }}"
           echo "RUN_ID         = ${{ inputs.RUN_ID }}"
