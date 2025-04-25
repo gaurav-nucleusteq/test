@@ -1,30 +1,39 @@
-name: Deploy Model
+name: ML Model Deployment
 
 on:
   workflow_dispatch:
     inputs:
-      callback_url:
+      MODEL_NAME:
+        description: "Name of the model"
         required: true
-        type: string
-      token:
+      MODEL_VERSION:
+        description: "Version of the model"
         required: true
-        type: string
+      S3_BUCKET_NAME:
+        description: "S3 bucket name"
+        required: true
+      EXPERIMENT_ID:
+        description: "MLFlow experiment ID"
+        required: true
+      RUN_ID:
+        description: "MLflow Run ID"
+        required: true
+
+run-name: ml-model-deployment-${{ inputs.MODEL_NAME }}-${{ inputs.MODEL_VERSION }}
 
 jobs:
-  call-api:
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Call Public API with Bearer Token and Fixed Body
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Print input values
         run: |
-          echo "Calling public API..."
-
-          RESPONSE=$(curl -s -X POST https://api.dev.nuodata.io/nova-ai/v1/asset/list \
-            -H "Authorization: Bearer ${{ github.event.inputs.token }}" \
-            -H "Content-Type: application/json" \
-            -d '{
-              "visibility_scope": ["workspace"],
-              "scope_element_ids": ["66fb931d35dedf279acffd75"]
-            }')
-
-          echo "API response:"
-          echo "$RESPONSE"
+          echo "🔧 INPUT VALUES:"
+          echo "S3_BUCKET_NAME = ${{ inputs.S3_BUCKET_NAME }}"
+          echo "EXPERIMENT_ID  = ${{ inputs.EXPERIMENT_ID }}"
+          echo "RUN_ID         = ${{ inputs.RUN_ID }}"
+          echo "MODEL_NAME     = ${{ inputs.MODEL_NAME }}"
+          echo "MODEL_VERSION  = ${{ inputs.MODEL_VERSION }}"
