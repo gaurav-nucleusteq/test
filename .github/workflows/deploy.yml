@@ -32,3 +32,7 @@ jobs:
           echo "RUN_ID         = ${{ inputs.RUN_ID }}"
           echo "MODEL_NAME     = ${{ inputs.MODEL_NAME }}"
           echo "MODEL_VERSION  = ${{ inputs.MODEL_VERSION }}"
+      - name: Fail intentionally
+        run: |
+          echo "This step fails the workflow intentionally."
+          exit 1
