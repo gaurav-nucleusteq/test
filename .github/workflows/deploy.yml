@@ -1,5 +1,4 @@
 name: ML Model Deployment
-
 on:
   workflow_dispatch:
     inputs:
@@ -18,17 +17,13 @@ on:
       RUN_ID:
         description: "MLflow Run ID"
         required: true
-
 run-name: ml-model-deployment-${{ inputs.MODEL_NAME }}-${{ inputs.MODEL_VERSION }}
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
       - name: Print input values
         run: |
           echo "INPUT VALUES:"
@@ -37,3 +32,7 @@ jobs:
           echo "RUN_ID         = ${{ inputs.RUN_ID }}"
           echo "MODEL_NAME     = ${{ inputs.MODEL_NAME }}"
           echo "MODEL_VERSION  = ${{ inputs.MODEL_VERSION }}"
+      - name: :fire: Intentional failure for testing
+        run: |
+          echo "This step is intentionally failing for test purposes..."
+          exit 1
