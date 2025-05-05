@@ -32,7 +32,3 @@ jobs:
           echo "RUN_ID         = ${{ inputs.RUN_ID }}"
           echo "MODEL_NAME     = ${{ inputs.MODEL_NAME }}"
           echo "MODEL_VERSION  = ${{ inputs.MODEL_VERSION }}"
-      - name: :fire: Intentional failure for testing
-        run: |
-          echo "This step is intentionally failing for test purposes..."
-          exit 1
