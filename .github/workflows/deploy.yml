@@ -17,7 +17,12 @@ on:
       RUN_ID:
         description: "MLflow Run ID"
         required: true
-run-name: ml-model-deployment-${{ inputs.MODEL_NAME }}-${{ inputs.MODEL_VERSION }}
+      TERRAFORM_OPERATION:
+        description: "Terraform operation: create or destroy"
+        required: true
+
+run-name: ml-model-deployment-${{ inputs.MODEL_NAME }}-${{ inputs.MODEL_VERSION }}-${{ inputs.TERRAFORM_OPERATION }}
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -28,6 +33,7 @@ jobs:
         run: |
           echo "INPUT VALUES:"
           echo "S3_BUCKET_NAME = ${{ inputs.S3_BUCKET_NAME }}"
+          echo "TERRAFORM_OPERATION = ${{ inputs.TERRAFORM_OPERATION }}"
           echo "EXPERIMENT_ID  = ${{ inputs.EXPERIMENT_ID }}"
           echo "RUN_ID         = ${{ inputs.RUN_ID }}"
           echo "MODEL_NAME     = ${{ inputs.MODEL_NAME }}"
