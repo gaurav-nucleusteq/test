@@ -20,6 +20,9 @@ on:
       TERRAFORM_OPERATION:
         description: "Terraform operation: create or destroy"
         required: true
+      GENAI_CONFIG:
+        description: "GenAI config as a JSON string"
+        required: true
 
 run-name: ml-model-deployment-${{ inputs.MODEL_NAME }}-${{ inputs.MODEL_VERSION }}-${{ inputs.TERRAFORM_OPERATION }}
 
@@ -38,3 +41,11 @@ jobs:
           echo "RUN_ID         = ${{ inputs.RUN_ID }}"
           echo "MODEL_NAME     = ${{ inputs.MODEL_NAME }}"
           echo "MODEL_VERSION  = ${{ inputs.MODEL_VERSION }}"
+          echo "GENAI_CONFIG   = ${{ inputs.GENAI_CONFIG }}"
+
+      - name: Parse GENAI_CONFIG JSON (optional usage step)
+        run: |
+          echo "${{ inputs.GENAI_CONFIG }}" > genai_config.json
+          cat genai_config.json
+          echo "Parsed GENAI workspace_id:"
+          echo $(jq -r '.workspace_id' genai_config.json)
