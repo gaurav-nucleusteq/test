@@ -17,6 +17,24 @@ on:
       RUN_ID:
         description: "MLflow Run ID"
         required: true
+      Gaurav1:
+        description: "MLflow Run ID"
+        required: true
+      Gaurav2:
+        description: "MLflow Run ID"
+        required: true
+      Gaurav3:
+        description: "MLflow Run ID"
+        required: true
+      Gaurav4:
+        description: "MLflow Run ID"
+        required: true
+      Gaurav5:
+        description: "MLflow Run ID"
+        required: true
+      Gaurav6:
+        description: "MLflow Run ID"
+        required: true
       TERRAFORM_OPERATION:
         description: "Terraform operation: create or destroy"
         required: true
