@@ -35,6 +35,7 @@ on:
 
 run-name: ml-model-deployment-${{ inputs.MODEL_NAME }}-${{ inputs.MODEL_VERSION }}-${{ inputs.TERRAFORM_OPERATION }}
 
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -51,6 +52,7 @@ jobs:
           echo "MODEL_NAME     = ${{ inputs.MODEL_NAME }}"
           echo "MODEL_VERSION  = ${{ inputs.MODEL_VERSION }}"
           echo "GENAI_CONFIG   = ${{ inputs.GENAI_CONFIG }}"
+          echo "WORKSPACE_ID: ${{ fromJson(inputs.GENAI_CONFIG).workspace_id }}"
 
       - name: Parse GENAI_CONFIG JSON (optional usage step)
         run: |
