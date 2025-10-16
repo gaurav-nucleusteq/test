@@ -1,16 +1,32 @@
-name: Demo Workflow
+name: "Terraform Operations for Dev"
 
 on:
+  push:
+    branches:
+      - dev
+      - feature/NUO-3475/dynamic_cluster_configuration
+
   workflow_dispatch:
     inputs:
-      name:
-        description: "Gaurav Shrivastava"
-        required: true
-        default: "FastAPI User"
+      operation:
+        type: choice
+        description: Operation
+        required: false
+        options:
+          - plan
+          - apply
+      message:
+        type: string
+        description: "Optional message for this run"
+        required: false
+        default: "No message provided"
 
 jobs:
-  say_hello:
+  print_inputs:
     runs-on: ubuntu-latest
     steps:
-      - name: Say Hello
-        run: echo "Hello, ${{ github.event.inputs.name }}!"
+      - name: Print selected operation
+        run: echo "Operation: ${{ github.event.inputs.operation }}"
+
+      - name: Print message
+        run: echo "Message: ${{ github.eve
