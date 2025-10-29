@@ -1,62 +1,35 @@
-name: ML Model Deployment
+name: "POC: Handle Nested JSON Input"
+
 on:
   workflow_dispatch:
     inputs:
-      MODEL_NAME:
-        description: "Name of the model"
-        required: true
-      MODEL_VERSION:
-        description: "Version of the model"
-        required: true
-      S3_BUCKET_NAME:
-        description: "S3 bucket name"
-        required: true
-      EXPERIMENT_ID:
-        description: "MLFlow experiment ID"
-        required: true
-      RUN_ID:
-        description: "MLflow Run ID"
-        required: true
-      Gaurav1:
-        description: "MLflow Run ID"
-        required: true
-      Gaurav2:
-        description: "MLflow Run ID"
-        required: true
-      Gaurav3:
-        description: "MLflow Run ID"
-        required: true
-      TERRAFORM_OPERATION:
-        description: "Terraform operation: create or destroy"
-        required: true
-      GENAI_CONFIG:
-        description: "GenAI config as a JSON string"
+      CONFIG_JSON:
+        description: "Full JSON config input (can contain nested JSON fields)"
         required: true
 
-run-name: ml-model-deployment-${{ inputs.MODEL_NAME }}-${{ inputs.MODEL_VERSION }}-${{ inputs.TERRAFORM_OPERATION }}
-
+run-name: POC-NestedJSON-${{ fromJson(inputs.CONFIG_JSON).entity_type }}
 
 jobs:
-  deploy:
+  print-json:
     runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-      - name: Print input values
-        run: |
-          echo "INPUT VALUES:"
-          echo "S3_BUCKET_NAME = ${{ inputs.S3_BUCKET_NAME }}"
-          echo "TERRAFORM_OPERATION = ${{ inputs.TERRAFORM_OPERATION }}"
-          echo "EXPERIMENT_ID  = ${{ inputs.EXPERIMENT_ID }}"
-          echo "RUN_ID         = ${{ inputs.RUN_ID }}"
-          echo "MODEL_NAME     = ${{ inputs.MODEL_NAME }}"
-          echo "MODEL_VERSION  = ${{ inputs.MODEL_VERSION }}"
-          echo "GENAI_CONFIG   = ${{ inputs.GENAI_CONFIG }}"
-          echo "WORKSPACE_ID: ${{ fromJson(inputs.GENAI_CONFIG).workspace_id }}"
 
-      - name: Parse GENAI_CONFIG JSON (optional usage step)
+    env:
+      CONFIG_JSON: ${{ inputs.CONFIG_JSON }}
+      ENTITY_TYPE: ${{ fromJson(inputs.CONFIG_JSON).entity_type }}
+      TOOLS_JSON: ${{ toJson(fromJson(inputs.CONFIG_JSON).tools) }}
+
+    steps:
+      - name: Print Full Input JSON
         run: |
-          echo "${{ inputs.GENAI_CONFIG }}" > genai_config.json
-          cat genai_config.json
-          echo "Parsed GENAI workspace_id:"
-          echo $(jq -r '.workspace_id' genai_config.json)
+          echo "Full CONFIG_JSON:"
+          echo "$CONFIG_JSON"
+
+      - name: Print Extracted Entity Type
+        run: |
+          echo "Entity Type: $ENTITY_TYPE"
+
+      - name: Print Nested Tools JSON
+        run: |
+          echo "TOOLS_JSON: $TOOLS_JSON"
+          echo "Formatted pretty version:"
+          echo "$TOOLS_JSON" | jq .
