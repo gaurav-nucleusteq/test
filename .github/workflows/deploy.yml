@@ -16,8 +16,8 @@ jobs:
     env:
       CONFIG_JSON: ${{ inputs.CONFIG_JSON }}
       ENTITY_TYPE: ${{ fromJson(inputs.CONFIG_JSON).entity_type }}
-      # 👇 Changed from toJson(...) to join(...)
-      TOOLS_JSON: ${{ join(fromJson(inputs.CONFIG_JSON).tools, ',') }}
+      TOOLS_JSON: ${{ toJson(fromJson(inputs.CONFIG_JSON).tools) }}
+
 
     steps:
       - name: Print Full Input JSON
@@ -29,6 +29,8 @@ jobs:
         run: |
           echo "Entity Type: $ENTITY_TYPE"
 
-      - name: Print Tools as Comma-Separated String
+      - name: Print Nested Tools JSON
         run: |
           echo "TOOLS_JSON: $TOOLS_JSON"
+          echo "Formatted pretty version:"
+          echo "$TOOLS_JSON" | jq .
