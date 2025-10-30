@@ -16,7 +16,7 @@ jobs:
     env:
       CONFIG_JSON: ${{ inputs.CONFIG_JSON }}
       ENTITY_TYPE: ${{ fromJson(inputs.CONFIG_JSON).entity_type }}
-      TOOLS_JSON: ${{ toJson(fromJson(inputs.CONFIG_JSON).tools) }}
+      TOOL_NAMES: ${{ toJson(fromJson(inputs.CONFIG_JSON).tool_names) }}
 
 
     steps:
@@ -31,6 +31,6 @@ jobs:
 
       - name: Print Nested Tools JSON
         run: |
-          echo "TOOLS_JSON: $TOOLS_JSON"
+          echo "TOOL_NAMES: $TOOL_NAMES"
           echo "Formatted pretty version:"
-          echo "$TOOLS_JSON" | jq .
+          echo "$TOOL_NAMES" | jq .
