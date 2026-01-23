@@ -1,3 +1,7 @@
+terraform {
+  backend "local" {}
+}
+
 output "model_properties_debug" {
   value = var.model_properties
 }
