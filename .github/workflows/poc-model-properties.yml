@@ -1,0 +1,31 @@
+name: "PoC – Model Properties"
+
+on:
+  workflow_dispatch:
+    inputs:
+      DEPLOYMENT_CONFIG_JSON:
+        required: true
+      RUN_NAME:
+        required: true
+
+run-name: ${{ inputs.RUN_NAME }}
+
+env:
+  MODEL_PROPERTIES: ${{ toJson(fromJson(inputs.DEPLOYMENT_CONFIG_JSON).MODEL_PROPERTIES) }}
+
+jobs:
+  poc:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Update params.hcl
+        run: |
+          sed -i "s|model_properties = .*|model_properties = $MODEL_PROPERTIES|" params.hcl
+          cat params.hcl
+
+      - name: Terraform Init & Apply
+        run: |
+          terraform init
+          terraform apply -auto-approve
