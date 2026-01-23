@@ -1,0 +1,3 @@
+locals {
+  model_properties = {}
+}

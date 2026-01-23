@@ -1,31 +1,53 @@
-name: "PoC – Model Properties"
+name: "PoC – Model Properties via Terragrunt"
 
 on:
   workflow_dispatch:
     inputs:
       DEPLOYMENT_CONFIG_JSON:
+        description: "Deployment config JSON"
         required: true
       RUN_NAME:
+        description: "Run name"
         required: true
 
 run-name: ${{ inputs.RUN_NAME }}
 
 env:
+  # ---- Core test variables ----
+  MODEL_NAME: "test-model"
+  MODEL_VERSION: "v1"
+  DEPLOYMENT_TYPE: "GENAI"
+
+  TOOL_NAMES: ${{ toJson(fromJson(inputs.DEPLOYMENT_CONFIG_JSON).TOOL_NAMES) }}
   MODEL_PROPERTIES: ${{ toJson(fromJson(inputs.DEPLOYMENT_CONFIG_JSON).MODEL_PROPERTIES) }}
 
 jobs:
   poc:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Update params.hcl
-        run: |
-          sed -i "s|model_properties = .*|model_properties = $MODEL_PROPERTIES|" params.hcl
-          cat params.hcl
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.3.3
 
-      - name: Terraform Init & Apply
+      - name: Setup Terragrunt
         run: |
-          terraform init
-          terraform apply -auto-approve
+          curl -Lo terragrunt https://github.com/gruntwork-io/terragrunt/releases/download/v0.40.1/terragrunt_linux_amd64
+          chmod +x terragrunt
+          sudo mv terragrunt /usr/local/bin/
+
+      - name: Update Terragrunt params
+        uses: ./.github/actions/update-terragrunt-params
+        with:
+          working_dir: infra/terragrunt/params.hcl
+          image_tag: "dummy:image"
+
+      - name: Terragrunt Apply (PoC)
+        working-directory: infra/terragrunt/dev
+        run: |
+          terragrunt init
+          terragrunt apply -auto-approve
