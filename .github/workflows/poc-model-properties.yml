@@ -43,8 +43,8 @@ jobs:
       - name: Update Terragrunt params
         uses: ./.github/actions/update-terragrunt-params
         with:
-          working_dir: infra/terragrunt/params.hcl
-          image_tag: "dummy:image"
+          params_file: infra/terragrunt/params.hcl
+
 
       - name: Terragrunt Apply (PoC)
         working-directory: infra/terragrunt/dev

@@ -1,0 +1,33 @@
+name: Update Terragrunt Params
+description: Updates params.hcl with dynamic values
+
+inputs:
+  params_file:
+    description: Path to params.hcl
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - name: Update params.hcl
+      shell: bash
+      run: |
+        set -e
+
+        PARAMS_FILE="${{ inputs.params_file }}"
+
+        if [ ! -f "$PARAMS_FILE" ]; then
+          echo "ERROR: params.hcl not found at $PARAMS_FILE"
+          exit 1
+        fi
+
+        echo "Updating model_properties in $PARAMS_FILE"
+
+        if grep -q "model_properties =" "$PARAMS_FILE"; then
+          sed -i "s|model_properties = .*|model_properties = $MODEL_PROPERTIES|" "$PARAMS_FILE"
+        else
+          echo "  model_properties = $MODEL_PROPERTIES" >> "$PARAMS_FILE"
+        fi
+
+        echo "Final params.hcl:"
+        cat "$PARAMS_FILE"
