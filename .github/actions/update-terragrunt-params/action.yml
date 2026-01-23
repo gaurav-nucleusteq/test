@@ -22,12 +22,24 @@ runs:
         fi
 
         echo "Updating model_properties in $PARAMS_FILE"
+        echo "MODEL_PROPERTIES=$MODEL_PROPERTIES"
 
-        if grep -q "model_properties =" "$PARAMS_FILE"; then
-          sed -i "s|model_properties = .*|model_properties = $MODEL_PROPERTIES|" "$PARAMS_FILE"
-        else
-          echo "  model_properties = $MODEL_PROPERTIES" >> "$PARAMS_FILE"
-        fi
+        awk -v mp="$MODEL_PROPERTIES" '
+          BEGIN { replaced=0 }
+          {
+            if ($0 ~ /model_properties = /) {
+              print "  model_properties = " mp
+              replaced=1
+            } else {
+              print $0
+            }
+          }
+          END {
+            if (replaced == 0) {
+              print "  model_properties = " mp
+            }
+          }
+        ' "$PARAMS_FILE" > "$PARAMS_FILE.tmp" && mv "$PARAMS_FILE.tmp" "$PARAMS_FILE"
 
         echo "Final params.hcl:"
         cat "$PARAMS_FILE"
