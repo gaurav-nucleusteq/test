@@ -12,4 +12,5 @@ locals {
 
 inputs = {
   model_properties = local.params.locals.model_properties
+  mcp_properties   = local.params.locals.mcp_properties
 }

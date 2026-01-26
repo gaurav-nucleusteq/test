@@ -21,6 +21,26 @@ runs:
           exit 1
         fi
 
+        echo "updating mcp_properties in $PARAMS_FILE"
+        echo "MCP_PROPERTIES=$MCP_PROPERTIES"
+
+        awk -v mp="$MCP_PROPERTIES" '
+          BEGIN { replaced=0 }
+          {
+            if ($0 ~ /mcp_properties = /) {
+              print "  mcp_properties = " mp
+              replaced=1
+            } else {
+              print $0
+            }
+          }
+          END {
+            if (replaced == 0) {
+              print "  mcp_properties = " mp
+            }
+          }
+        ' "$PARAMS_FILE" > "$PARAMS_FILE.tmp" && mv "$PARAMS_FILE.tmp" "$PARAMS_FILE"
+
         echo "Updating model_properties in $PARAMS_FILE"
         echo "MODEL_PROPERTIES=$MODEL_PROPERTIES"
 

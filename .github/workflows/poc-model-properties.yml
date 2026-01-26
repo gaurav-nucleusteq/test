@@ -20,6 +20,7 @@ env:
 
   TOOL_NAMES: ${{ toJson(fromJson(inputs.DEPLOYMENT_CONFIG_JSON).TOOL_NAMES) }}
   MODEL_PROPERTIES: ${{ toJson(fromJson(inputs.DEPLOYMENT_CONFIG_JSON).MODEL_PROPERTIES) }}
+  MCP_PROPERTIES: ${{ toJson(fromJson(inputs.DEPLOYMENT_CONFIG_JSON).MCP_PROPERTIES) }}
 
 jobs:
   poc:
