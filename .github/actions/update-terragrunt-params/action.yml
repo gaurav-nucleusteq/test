@@ -24,21 +24,12 @@ runs:
         echo "updating mcp_properties in $PARAMS_FILE"
         echo "MCP_PROPERTIES=$MCP_PROPERTIES"
 
-        awk -v mp="$MCP_PROPERTIES" '
-          BEGIN { replaced=0 }
-          {
-            if ($0 ~ /mcp_properties = /) {
-              print "  mcp_properties = " mp
-              replaced=1
-            } else {
-              print $0
-            }
-          }
-          END {
-            if (replaced == 0) {
-              print "  mcp_properties = " mp
-            }
-          }
+        awk -v mcp="$MCP_PROPERTIES" '
+        /^[[:space:]]*mcp_properties[[:space:]]*=/ {
+          print "  mcp_properties = " mcp
+          next
+        }
+        { print }
         ' "$PARAMS_FILE" > "$PARAMS_FILE.tmp" && mv "$PARAMS_FILE.tmp" "$PARAMS_FILE"
 
         echo "Updating model_properties in $PARAMS_FILE"
